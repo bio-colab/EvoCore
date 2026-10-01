@@ -396,6 +396,17 @@ class EvoForge:
 
         return buf.getvalue()
 
+    @staticmethod
+    def download_base_iso(dest: Path) -> Path:
+        """Downloads official Tiny Core Linux 17.x base ISO if missing."""
+        import urllib.request
+        url = "http://tinycorelinux.net/17.x/x86/release/TinyCore-current.iso"
+        print(f"[EvoForge] Base ISO not found. Downloading upstream Tiny Core 17.x from {url}...")
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        urllib.request.urlretrieve(url, str(dest))
+        print(f"[EvoForge] Download complete ({dest.stat().st_size // (1024*1024)} MB).")
+        return dest
+
     def build_profile(
         self,
         profile_name: str = "minimal",
@@ -410,6 +421,8 @@ class EvoForge:
 
         profile = json.loads(prof_file.read_text(encoding="utf-8"))
         iso_source = Path(base_iso or (self.root / "TinyCore-current.iso"))
+        if not iso_source.is_file():
+            self.download_base_iso(iso_source)
         out_root = Path(output_dir or (self.root / "output" / profile_name))
         out_root.mkdir(parents=True, exist_ok=True)
 

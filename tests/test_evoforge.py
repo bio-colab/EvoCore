@@ -53,9 +53,22 @@ def test_cpio_archive_roundtrip():
     assert run_entry.mode == 0o100755
 
 
+def get_base_iso() -> Path:
+    iso_path = Path(__file__).parent.parent / "TinyCore-current.iso"
+    if not iso_path.is_file():
+        import urllib.request
+        url = "http://tinycorelinux.net/17.x/x86/release/TinyCore-current.iso"
+        try:
+            print(f"\n[CI] Downloading base Tiny Core ISO from {url}...")
+            urllib.request.urlretrieve(url, str(iso_path))
+        except Exception as exc:
+            pytest.skip(f"Base ISO not present and download failed: {exc}")
+    return iso_path
+
+
 def test_iso_inspector_base():
     """Verifies ISO9660 parsing on TinyCore-current.iso."""
-    iso_path = Path(__file__).parent.parent / "TinyCore-current.iso"
+    iso_path = get_base_iso()
     assert iso_path.exists(), "TinyCore-current.iso must exist in EvoCore/"
 
     inspector = IsoInspector(iso_path)
@@ -141,7 +154,8 @@ def test_evoforge_build_profile(tmp_path):
 def test_svr4_device_nodes_in_remastered_initrd():
     """Verifies that device nodes preserve non-zero major and minor numbers for Linux kernel."""
     forge = EvoForge()
-    iso_inspector = IsoInspector(forge.root / "TinyCore-current.iso")
+    iso_path = get_base_iso()
+    iso_inspector = IsoInspector(iso_path)
     base_core = iso_inspector.get_file_bytes("BOOT/CORE.GZ")
 
     remastered = forge.remaster_initrd(

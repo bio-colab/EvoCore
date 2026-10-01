@@ -30,6 +30,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest
 
+      - name: Cache Upstream Tiny Core Base ISO
+        uses: actions/cache@v4
+        id: iso-cache
+        with:
+          path: TinyCore-current.iso
+          key: tinycore-17.1-x86-iso-v1
+
+      - name: Download Base Tiny Core ISO if not cached
+        if: steps.iso-cache.outputs.cache-hit != 'true'
+        run: |
+          python -c "import urllib.request, os; url = 'http://tinycorelinux.net/17.x/x86/release/TinyCore-current.iso'; print(f'Downloading {url}...'); urllib.request.urlretrieve(url, 'TinyCore-current.iso'); print(f'Done: {os.path.getsize(\"TinyCore-current.iso\")} bytes')"
+
       - name: Run EvoForge Automated Test Suite
         run: |
           pytest tests/test_evoforge.py -v
