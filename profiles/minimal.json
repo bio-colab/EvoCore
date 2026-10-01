@@ -1,0 +1,27 @@
+{
+  "profile": "minimal",
+  "version": "0.1.0",
+  "description": "Minimal EvoCore appliance for pure algorithmic evolution and Stokes-Newton physics benchmark",
+  "architecture": "x86_64",
+  "target_kernel": "vmlinuz",
+  "target_initrd": "core.gz",
+  "extensions": [
+    "python3.tcz"
+  ],
+  "default_mode": "lab",
+  "experiment": {
+    "domain": "stokes_newton_drag",
+    "level": "LC",
+    "n_train": 50,
+    "sigma": 0.02,
+    "seed": 101,
+    "generations": 35,
+    "population_size": 30
+  },
+  "provenance": {
+    "emit_manifest": true,
+    "hash_dataset": true,
+    "hash_kernel": true,
+    "auto_shutdown": false
+  }
+}

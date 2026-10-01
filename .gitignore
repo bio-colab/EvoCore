@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large binary OS images and archives (Distribute via GitHub Releases)
+*.iso
+*.cpio.gz
+*.gz
+*.tcz
+*.tcz.md5.txt
+*.whl
+
+# Build outputs and runtime logs
+output/
+tcz_cache/
+python_root/
+*.log
+*.tmp
+
+# Third-party installers
+qemu-setup.exe
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editor / IDE environments
+.vscode/
+.idea/
+*.swp
+*.swo

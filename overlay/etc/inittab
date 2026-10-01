@@ -1,0 +1,12 @@
+# /etc/inittab: init configuration for busybox init in EvoCore
+::sysinit:/etc/init.d/rcS
+
+# Autologin on both graphical console (tty1) and serial console (ttyS0)
+tty1::respawn:/sbin/getty -nl /sbin/autologin 38400 tty1
+ttyS0::respawn:/sbin/getty -nl /sbin/autologin 115200 ttyS0
+
+# System restart & shutdown handlers
+::restart:/etc/init.d/rc.shutdown
+::restart:/sbin/init
+::ctrlaltdel:/sbin/reboot
+::shutdown:/etc/init.d/rc.shutdown

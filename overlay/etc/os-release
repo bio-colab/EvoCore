@@ -1,0 +1,11 @@
+NAME="EvoCore"
+VERSION="0.2.0"
+ID=evocore
+ID_LIKE=tinycore
+VERSION_ID=17.1
+EVOCORE_VERSION="0.2.0"
+PRETTY_NAME="Darwin-Evolab Experimental Linux (EvoCore v0.2)"
+ANSI_COLOR="0;36"
+HOME_URL="https://github.com/bio-colab/darwin-evolab"
+SUPPORT_URL="https://github.com/bio-colab/darwin-evolab/issues"
+BUG_REPORT_URL="https://github.com/bio-colab/darwin-evolab/issues"

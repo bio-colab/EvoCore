@@ -1,0 +1,27 @@
+{
+  "profile": "eda",
+  "version": "0.1.0",
+  "description": "Silicon & Electronic Design Automation (EDA) appliance with Yosys, Verilator, and ngspice",
+  "architecture": "x86_64",
+  "target_kernel": "vmlinuz",
+  "target_initrd": "core.gz",
+  "extensions": [
+    "python3.tcz",
+    "yosys.tcz",
+    "verilator.tcz",
+    "ngspice.tcz"
+  ],
+  "default_mode": "lab",
+  "experiment": {
+    "domain": "discrete_logic",
+    "specification": "Sum = A ^ B; Cout = A & B",
+    "generations": 40,
+    "population_size": 20
+  },
+  "provenance": {
+    "emit_manifest": true,
+    "hash_dataset": true,
+    "hash_kernel": true,
+    "auto_shutdown": false
+  }
+}

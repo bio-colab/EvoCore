@@ -1,0 +1,31 @@
+{
+  "profile": "symbolic",
+  "version": "0.1.0",
+  "description": "Symbolic & Scientific EvoCore appliance with NumPy, SciPy, SymPy, and Z3 SMT solver",
+  "architecture": "x86_64",
+  "target_kernel": "vmlinuz",
+  "target_initrd": "core.gz",
+  "extensions": [
+    "python3.tcz",
+    "numpy.tcz",
+    "scipy.tcz",
+    "sympy.tcz",
+    "z3.tcz"
+  ],
+  "default_mode": "lab",
+  "experiment": {
+    "domain": "stokes_newton_drag",
+    "level": "LB",
+    "n_train": 200,
+    "sigma": 0.0,
+    "seed": 101,
+    "generations": 50,
+    "population_size": 40
+  },
+  "provenance": {
+    "emit_manifest": true,
+    "hash_dataset": true,
+    "hash_kernel": true,
+    "auto_shutdown": false
+  }
+}
