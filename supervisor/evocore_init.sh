@@ -19,7 +19,7 @@ log_output() {
     done
 }
 
-# Display ASCII banner on detected consoles
+# Display ASCII banner
 if [ -f /opt/evocore/banner.txt ]; then
     for tty in /dev/tty1 /dev/ttyS0; do
         if [ -c "$tty" ]; then
@@ -29,7 +29,7 @@ if [ -f /opt/evocore/banner.txt ]; then
 fi
 
 log_output "==========================================================================="
-log_output "  Appliance Version : EvoCore v0.2.0 (Autonomous Laboratory Edition)"
+log_output "  Appliance Version : EvoCore v0.3.0 (Autonomous Laboratory Edition)"
 log_output "  Kernel Release    : $(uname -r 2>/dev/null)"
 log_output "  Machine Arch      : $(uname -m 2>/dev/null)"
 log_output "  Total Memory      : $(grep MemTotal /proc/meminfo 2>/dev/null | awk '{print $2, $3}')"

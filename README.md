@@ -84,6 +84,15 @@ flowchart TD
 
 ---
 
+### 📸 Live Appliance Snapshots & In-Engine Telemetry
+
+| 1. Full ISO CD-ROM Bootloader | 2. Autonomous Laboratory Mode | 3. Interactive Research Shell |
+| :---: | :---: | :---: |
+| ![EvoCore ISO Boot](docs/images/evocore_iso_boot.png) | ![EvoCore Lab Mode](docs/images/evocore_lab_mode.png) | ![EvoCore Research Mode](docs/images/evocore_research_mode.png) |
+| *ISOLINUX hybrid bootloader menu* | *Live in-RAM Stokes-Newton physics discovery* | *Direct interactive Linux research shell* |
+
+---
+
 <a name="cli-reference"></a>
 ### 💻 Sovereign CLI Reference (`evocore`)
 
@@ -195,6 +204,15 @@ Select mode from menu:
    أمر `evocore repl` يوفر بيئة أوامر تفاعلية مع إكمال تلقائي (Autocomplete) وسجل أوامر محفوظ.
 5. **تنفيذ معقم في الذاكرة الحية (In-Memory Execution)**:
    يقلع النظام بأكمله في RAM بحجم أقل من **70 ميجابايت** وفي أقل من ثانية واحدة، دون ترك أي أثر أو ملفات مؤقتة على القرص الصلب.
+
+---
+
+### 📸 لقطات حية لنظام EvoCore أثناء التشغيل الفعلي في الذاكرة
+
+| 1. إقلاع الـ ISO الكامل | 2. الوضع المعملي الآلي | 3. صدفة البحث التفاعلية |
+| :---: | :---: | :---: |
+| ![EvoCore ISO Boot](docs/images/evocore_iso_boot.png) | ![EvoCore Lab Mode](docs/images/evocore_lab_mode.png) | ![EvoCore Research Mode](docs/images/evocore_research_mode.png) |
+| *قائمة إقلاع ISOLINUX الهجينة للقرص المدمج* | *اكتشاف قوانين ستوكس-نيوتن فيزيائياً في الذاكرة* | *سطر أوامر لينكس تفاعلي متكامل مع بايثون* |
 
 ---
 
