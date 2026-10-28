@@ -18,7 +18,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-EVOCORE_VERSION = "0.2.0"
+EVOCORE_VERSION = "0.3.0"
 
 
 if hasattr(sys.stdout, "reconfigure"):

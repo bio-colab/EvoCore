@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Verify Remastering Engine & Manifest Integrity
+    name: Test (${{ matrix.os }}, Py${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -25,23 +25,23 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Test Dependencies
+      - name: Install Package & Test Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest
+          pip install -e ".[test]"
 
       - name: Cache Upstream Tiny Core Base ISO
         uses: actions/cache@v4
         id: iso-cache
         with:
           path: TinyCore-current.iso
-          key: tinycore-17.1-x86-iso-v1
+          key: tinycore-17.1-x86-iso-v2
 
       - name: Download Base Tiny Core ISO if not cached
         if: steps.iso-cache.outputs.cache-hit != 'true'
         run: |
-          python -c "import urllib.request, os; url = 'http://tinycorelinux.net/17.x/x86/release/TinyCore-current.iso'; print(f'Downloading {url}...'); urllib.request.urlretrieve(url, 'TinyCore-current.iso'); print(f'Done: {os.path.getsize(\"TinyCore-current.iso\")} bytes')"
+          python -c "import urllib.request, os; req = urllib.request.Request('http://tinycorelinux.net/17.x/x86/release/TinyCore-current.iso', headers={'User-Agent': 'Mozilla/5.0'}); open('TinyCore-current.iso', 'wb').write(urllib.request.urlopen(req, timeout=60).read()); print('Done downloading TinyCore ISO')"
 
-      - name: Run EvoForge Automated Test Suite
+      - name: Run EvoCore Test Suite
         run: |
-          pytest tests/test_evoforge.py -v
+          pytest tests -v

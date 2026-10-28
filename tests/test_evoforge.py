@@ -60,9 +60,14 @@ def get_base_iso() -> Path:
         url = "http://tinycorelinux.net/17.x/x86/release/TinyCore-current.iso"
         try:
             print(f"\n[CI] Downloading base Tiny Core ISO from {url}...")
-            urllib.request.urlretrieve(url, str(iso_path))
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+            with urllib.request.urlopen(req, timeout=30) as resp, open(iso_path, "wb") as f:
+                while chunk := resp.read(65536):
+                    f.write(chunk)
         except Exception as exc:
             pytest.skip(f"Base ISO not present and download failed: {exc}")
+    if not iso_path.is_file():
+        pytest.skip("Base ISO missing")
     return iso_path
 
 

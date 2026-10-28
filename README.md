@@ -13,10 +13,11 @@
 **Minimal, Immutable, Cryptographically Attested Linux Operating Environment for Reproducible Scientific Discovery**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/badge/Release-v0.2.0-green.svg)](https://github.com/bio-colab/EvoCore/releases)
+[![Release](https://img.shields.io/badge/Release-v0.3.0-green.svg)](https://github.com/bio-colab/EvoCore/releases)
 [![Lineage](https://img.shields.io/badge/Lineage-Darwin--Evolab-8A2BE2.svg)](https://github.com/bio-colab/darwin-evolab)
 [![Kernel](https://img.shields.io/badge/Kernel-Linux%206.18-orange.svg)](https://www.kernel.org/)
 [![Runtime](https://img.shields.io/badge/Runtime-Python%203.9%20%2B%20NumPy-yellow.svg)](https://www.python.org/)
+[![CLI](https://img.shields.io/badge/CLI-evocore-007acc.svg)](#cli-reference)
 
 [English](#english) • [العربية](#arabic)
 
@@ -30,7 +31,7 @@
 **EvoCore** is an immutable, specialized, micro-kernel Linux operating appliance engineered specifically for autonomous evolutionary experiments, symbolic mathematics, and scientific law discovery.
 
 ### 🧬 Lineage & Scientific Origin
-EvoCore was born from **[Darwin-Evolab](https://github.com/bio-colab/darwin-evolab)** — a multi-domain autonomous evolutionary discovery engine. While Darwin-Evolab provides the algorithmic brains (genetic algorithms, self-modeling, gate verification, and physics evaluators), **EvoCore provides its physical and computational body**: an immutable, sterile, operating environment where the evolutionary experiment is the primary mission of the operating system itself.
+EvoCore was born from **[Darwin-Evolab](https://github.com/bio-colab/darwin-evolab)** — a multi-domain autonomous evolutionary discovery engine. While Darwin-Evolab provides the algorithmic brains (genetic algorithms, self-modeling, gate verification, and physics evaluators), **EvoCore provides its physical and computational body**: an immutable, sterile operating environment where the scientific experiment is the primary mission of the operating system itself.
 
 ---
 
@@ -39,7 +40,7 @@ EvoCore was born from **[Darwin-Evolab](https://github.com/bio-colab/darwin-evol
 ```mermaid
 flowchart TD
     subgraph BOOT ["1. Boot & Memory Load"]
-        BIOS["BIOS / UEFI / QEMU / Bare Metal"] -->|Instant Direct Boot| KERNEL["Linux Kernel 6.18.35 (vmlinuz - 6.1MB)"]
+        BIOS["BIOS / UEFI / QEMU / Bare Metal"] -->|Direct Kernel Boot| KERNEL["Linux Kernel 6.18.35 (vmlinuz - 6.1MB)"]
         KERNEL --> INITRD["Remastered RAM Initramfs (core.gz - 42MB)"]
     end
 
@@ -50,122 +51,123 @@ flowchart TD
         BASE --> HOOK["/opt/evocore/evocore_init.sh"]
     end
 
-    subgraph SUPERVISOR ["3. EvoCore Autonomous Supervisor"]
-        HOOK --> AUDIT["Hardware & Kernel Audit"]
-        AUDIT --> MODE{"Boot Mode"}
+    subgraph SUPERVISOR ["3. Autonomous Supervisor & Attestation"]
+        HOOK --> AUDIT["Hardware & Kernel Telemetry"]
+        AUDIT --> MODE{"Operating Mode"}
         MODE -->|evomode=lab| LAB["Autonomous Lab Runner"]
         MODE -->|evomode=research| SHELL["Interactive Research Shell"]
         
         LAB --> SOLVE["Stokes-Newton Drag Search (35 Generations)"]
         SOLVE --> GATES["Physical Gate Verification (Monotonicity, Limits)"]
-        GATES --> ATTEST["Emit Signed evidence_manifest.json"]
-        ATTEST --> POWEROFF["ACPI Safe Power Down (/sbin/poweroff)"]
+        GATES --> MERKLE["Rootfs Merkle Tree + Composite Signature"]
+        MERKLE --> CAPSULE["Emit Sealed .evobundle & evidence_manifest.json"]
+        CAPSULE --> POWEROFF["ACPI Safe Power Down (/sbin/poweroff)"]
     end
 ```
 
 1. **100% Bit-for-Bit Reproducibility**:
-   In science, "it worked on my machine" is unacceptable. EvoCore encapsulates the entire operating system, kernel, C libraries, Python runtime, and evolutionary algorithms into a single **hermetic appliance** verified by SHA-256 hashes.
+   In science, "it worked on my machine" is unacceptable. EvoCore encapsulates the entire operating system, kernel, C libraries, Python runtime, and evolutionary algorithms into a single **hermetic appliance** verified by SHA-256 hashes and rootfs Merkle trees.
 2. **Zero-Contamination RAM Execution**:
    The entire OS boots and runs purely in RAM (~69 MB disk footprint, ~400 MB RAM consumption). It leaves no traces on host storage and eliminates background OS noise or library version drift.
-3. **Cryptographic Attestation & Evidence Manifests**:
-   Every run produces a signed JSON manifest containing:
-   - `environment_sha256`: Kernel + Architecture + Python Runtime
-   - `specification_sha256`: Experiment Domain + Seed + Generations + Constraints
-   - `solution_sha256`: Discovered Mathematical Formula + Fitness + Validation Error
-4. **Bare-Metal & Virtualization Agnostic**:
-   Bootable instantly via QEMU, VirtualBox, VMware, KVM, or burned directly onto a USB drive to turn any bare-metal PC into a dedicated evolutionary workstation.
-5. **Declarative Appliance Factory (`evoforge.py`)**:
-   EvoCore features a pure-Python remastering engine capable of generating customized ISOs matching declarative profiles:
-   - `minimal`: Stokes-Newton fluid drag & symbolic algebra (~69 MB).
-   - `symbolic`: Adds SymPy & Z3 SMT solver for formal theorem proving.
-   - `eda`: Adds Yosys & Verilator for silicon hardware circuit synthesis.
+3. **Deep Forensic Attestation & Sealed Capsules (`.evobundle`)**:
+   Every run generates deep cryptographic provenance:
+   - `rootfs_merkle_root`: Deterministic Merkle hash of all filesystem inodes.
+   - `kernel_sha256`: Digest of the active Linux kernel binary.
+   - `specification_sha256`: Digest of canonical experiment constraints and seeds.
+   - `solution_sha256`: Structural fingerprint of the discovered formula AST.
+   - `composite_signature`: Cryptographic ledger uniting physical and mathematical layers.
+   - Sealed `.evobundle` container packaging manifests, logs, and verification proofs.
+4. **Agent-Native Dual Mode (`--json` vs Human TUI)**:
+   Every command supports strict machine-readable `--json` output with deterministic exit codes for autonomous AI coding agents, alongside an ANSI-rich terminal UI and interactive REPL shell (`evocore repl`).
+5. **Declarative Appliance Factory**:
+   Pure-Python build and remastering engine capable of producing customized boot images from declarative profiles (`minimal`, `symbolic`, `eda`).
 
 ---
 
-### 💻 Quick Start & Host Launchers
+<a name="cli-reference"></a>
+### 💻 Sovereign CLI Reference (`evocore`)
 
-#### Prerequisites
-- **QEMU** (`qemu-system-x86_64`) installed.
-
-#### Running on Windows
-Within the `EvoCore/` directory:
-- **Batch Launcher**: Double-click `run_evocore.bat`
-- **PowerShell Launcher**: Run `.\run_evocore.ps1`
-
-Select from the interactive menu:
-```text
-  [1] Interactive Laboratory Mode (Default)
-      Opens graphical QEMU window with real-time ASCII telemetry & physics gates.
-  [2] Headless Lab Runner + Evidence Export
-      Runs silently in background, discovers physics formula, exports
-      evidence_manifest.json to host Windows disk, and powers off automatically.
-  [3] Research Shell Mode
-      Boots directly into an interactive root shell with Python 3 & Darwin-Evolab.
-  [4] Full ISO CD-ROM Boot
-      Simulates physical hardware boot from EvoCore-minimal.iso with ISOLINUX menu.
-```
-
-#### Running on Linux / macOS
+Install EvoCore as a system command or Python package:
 ```bash
-# Interactive Laboratory Mode
-qemu-system-x86_64 \
-  -kernel output/minimal/boot/vmlinuz \
-  -initrd output/minimal/boot/core.gz \
-  -append "console=tty0 quiet evomode=lab" \
-  -m 512M
-
-# Headless Autonomous Runner with Serial Capture
-qemu-system-x86_64 \
-  -kernel output/minimal/boot/vmlinuz \
-  -initrd output/minimal/boot/core.gz \
-  -append "console=ttyS0 quiet evomode=lab evopoweroff=1" \
-  -serial file:output/last_run.log \
-  -nographic \
-  -m 512M
-
-# Extract Evidence Manifest
-python extract_manifest.py output/last_run.log output/evidence_manifest.json
+pip install -e .
 ```
 
----
+#### Core Commands
 
-### 📜 Evidence Manifest Contract (`evidence_manifest.json`)
+| Command | Purpose |
+| :--- | :--- |
+| `evocore info` | Inspect appliance environment, QEMU detection, and build artifacts |
+| `evocore build` | Remaster initramfs and generate bootable ISO from declarative profile |
+| `evocore run` | Launch EvoCore in QEMU (lab, research, or ISO mode) |
+| `evocore evidence verify` | Forensically verify Merkle tree and cryptographic manifest integrity |
+| `evocore evidence inspect` | Display discovered mathematical laws, fitness, and telemetry |
+| `evocore evidence bundle` | Pack evidence manifest and logs into sealed `.evobundle` |
+| `evocore evidence unpack` | Extract sealed `.evobundle` capsule to destination directory |
+| `evocore profile list` | List available appliance profiles (`minimal`, `symbolic`, `eda`) |
+| `evocore profile show` | View declarative specification JSON for a profile |
+| `evocore repl` | Interactive shell with auto-completion and command history |
 
+#### Agent-Native Machine JSON Mode
+Appending `--json` to any command outputs strictly valid JSON on `stdout`, ideal for autonomous agent loops and CI pipelines:
+
+```bash
+# Query appliance status as JSON
+evocore info --json
+
+# Run autonomous lab experiment with sealed evidence capsule
+evocore run --mode lab --headless --bundle --json
+
+# Verify evidence authenticity programmatically
+evocore evidence verify output/evidence_manifest.json --json
+```
+
+Sample JSON response:
 ```json
 {
-  "appliance": "EvoCore",
-  "appliance_version": "0.2.0",
-  "contract": "REPRODUCIBLE_SCIENTIFIC_EVIDENCE",
-  "timestamp_utc": "2026-10-01 22:21:12",
-  "execution_time_seconds": 22.26,
-  "hardware_telemetry": {
-    "system": "Linux",
-    "node": "box",
-    "kernel_release": "6.18.35-tinycore",
-    "machine": "i686",
-    "cpu_count": 1,
-    "memory_total_mb": 494.93,
-    "python_version": "3.9.21"
+  "status": "success",
+  "data": {
+    "valid": true,
+    "appliance": "EvoCore",
+    "version": "0.3.0",
+    "timestamp_utc": "2026-10-28 12:00:00",
+    "tampered_fields": [],
+    "checks": {
+      "specification_integrity": { "valid": true },
+      "solution_integrity": { "valid": true }
+    }
   },
-  "signatures": {
-    "environment_sha256": "743a83c5506d7954358f4a2b5466c539439ceb95358fd39b4c7e448a0132fcf2",
-    "specification_sha256": "106d71668db6c9d654f53b213df9d6e840aad6c9596b189da88f344765a89eb6",
-    "solution_sha256": "582646edf034a184f99ff5f64e812cadf113bc9b07083a5a53d6d8db24069f35"
-  },
-  "specification": {
-    "domain": "stokes_newton_drag",
-    "level": "LC",
-    "generations": 35,
-    "population_size": 30
-  },
-  "solution": {
-    "formula_name": "BrownLawlerCandidate",
-    "expression": "(((24 / Re) * (1 + (0.1532 * (Re ** 0.6756)))) + (0.4398 / ((Re ** 0.0200) + (8045.5980 / Re))))",
-    "fitness_score": 99.5015,
-    "e_gap": 0.00261,
-    "passed_gates": true
-  }
+  "message": "Cryptographic evidence verification PASSED."
 }
+```
+
+#### Deterministic Exit Codes
+| Code | Identifier | Meaning |
+| :---: | :--- | :--- |
+| `0` | `EXIT_SUCCESS` | Command completed successfully |
+| `1` | `EXIT_ERROR` | General operational error |
+| `2` | `EXIT_INVALID_ARGS` | Invalid arguments or schema validation failure |
+| `3` | `EXIT_QEMU_NOT_FOUND` | QEMU x86_64 emulator binary not found |
+| `4` | `EXIT_ARTIFACT_NOT_FOUND`| Required ISO, kernel, or manifest file missing |
+| `5` | `EXIT_ATTESTATION_FAILED`| Evidence manifest tampered or signature invalid |
+| `6` | `EXIT_TIMEOUT` | VM execution exceeded allotted timeout |
+| `7` | `EXIT_BUILD_FAILED` | Initramfs or ISO remastering failed |
+
+---
+
+### 💻 Host Launchers (Windows / Linux)
+
+#### Windows One-Click
+Within `EvoCore/`:
+- **Command Prompt**: Double-click `run_evocore.bat`
+- **PowerShell**: Run `.\run_evocore.ps1`
+
+Select mode from menu:
+```text
+  [1] Interactive Laboratory Mode (Default GUI)
+  [2] Headless Lab Runner + Sealed Evidence Capsule (.evobundle)
+  [3] Research Shell Mode (Interactive Root Shell)
+  [4] Full ISO CD-ROM Boot (ISOLINUX Menu)
+  [5] Interactive EvoCore REPL Shell
 ```
 
 ---
@@ -180,17 +182,19 @@ python extract_manifest.py output/last_run.log output/evidence_manifest.json
 
 ---
 
-### 🌟 أهم المميزات والإمكانيات
-1. **تكرار علمي قطعي 100% (Absolute Reproducibility)**:
-   القضاء التام على مشكلة "اشتغل على جهازي". بيئة التشغيل بالكامل مع النواة والمكتبات معزولة في صورة مشفرة تنتج نفس النتائج الرياضية على أي جهاز في العالم.
-2. **تنفيذ معقم في الذاكرة الحية (In-Memory Execution)**:
+### 🌟 النقلة النوعية في الإصدار v0.3.0
+1. **واجهة سطر أوامر سيادية متكاملة (`evocore`)**:
+   أداة متطورة تمكن الباحثين ووكلاء الذكاء الاصطناعي (AI Coding Agents) من التحكم الكامل ببناء النواة وتشغيل التجارب وتدقيق الأدلة العلمية.
+2. **عقد برمجي ثنائي صارم (`--json` vs TUI)**:
+   كل أمر يمكن تنفيذه بوضع `--json` ليصدر بيانات JSON قياسية نقية تماماً دون أي تشويش لوني أو شعارات نصية، مع أكواد خروج حتمية (Deterministic Exit Codes من 0 إلى 7) لمعالجة الأخطاء برمجياً.
+3. **توثيق أدلة عميق وشجرة ميركل (Merkle Rootfs Attestation)**:
+   - حساب بصمة شجرة ميركل (`rootfs_merkle_root`) لجميع ملفات نظام التشغيل في الذاكرة.
+   - توقيع مركب يربط بين بصمة النواة، وبصمة الذاكرة، ومحددات التجربة، والقانون المكتشف.
+   - حزم أدلة مشفرة ومختومة بصيغة كبسولات (`.evobundle`).
+4. **صدفة تفاعلية فورية (Interactive REPL Shell)**:
+   أمر `evocore repl` يوفر بيئة أوامر تفاعلية مع إكمال تلقائي (Autocomplete) وسجل أوامر محفوظ.
+5. **تنفيذ معقم في الذاكرة الحية (In-Memory Execution)**:
    يقلع النظام بأكمله في RAM بحجم أقل من **70 ميجابايت** وفي أقل من ثانية واحدة، دون ترك أي أثر أو ملفات مؤقتة على القرص الصلب.
-3. **توثيق مشفر غير قابل للدحض (Cryptographic Attestation)**:
-   كل اكتشاف فيزيائي يوقّع بـ 3 بصمات SHA-256 (بيئة العتاد والنواة + محددات التجربة + القانون المكتشف).
-4. **تشغيل على عتاد مجرد (Bare-Metal)**:
-   صورة الـ ISO الناتجة قابلة للحرق مباشرة على فلاشة USB لتشغيل أي جهاز كمبيوتر أو خادم كمحطة عمل تطورية مستقلة دون الحاجة لأي نظام تشغيل سابق.
-5. **محرك بناء ذاتي (`evoforge.py`)**:
-   أداة متكاملة بلغة بايثون تعيد بناء الـ ISO ونواة الذاكرة وفق ملفات تعريفية مرنة (`minimal`, `symbolic`, `eda`).
 
 ---
 
@@ -198,19 +202,27 @@ python extract_manifest.py output/last_run.log output/evidence_manifest.json
 
 ```text
 EvoCore/
-├── overlay/                 # Root filesystem overlays (/etc/os-release, /etc/inittab)
-├── profiles/                # Declarative appliance specifications (minimal, symbolic, eda)
-├── supervisor/              # Autonomous supervisor engine & hardware audits
-│   ├── supervisor.py        # Python discovery supervisor & attestation generator
-│   ├── evocore_init.sh      # Early kernel boot hooks & console multiplexer
-│   └── banner.txt           # ASCII appliance branding banner
-├── tests/                   # Pytest automated verification suite (6/6 passing)
-├── evoforge.py              # Pure-Python declarative ISO remastering engine
-├── extract_manifest.py      # Host helper extracting evidence manifests from serial logs
-├── run_evocore.bat          # One-click Windows Command Prompt launcher
-├── run_evocore.ps1          # One-click Windows PowerShell launcher
+├── evocore/                 # Core Python package & CLI engine
+│   ├── cli.py               # Master Click entry point (evocore)
+│   ├── constants.py         # Global exit codes, paths, and metadata
+│   ├── core/                # Core engines
+│   │   ├── forge.py         # CPIO initramfs & ISO9660 remastering engine
+│   │   ├── runner.py        # QEMU hypervisor runner & evidence extractor
+│   │   ├── provenance.py    # Merkle tree hashing & cryptographic attestation
+│   │   ├── bundle.py        # Sealed evidence capsules (.evobundle)
+│   │   └── profile.py       # Declarative appliance profile manager
+│   ├── commands/            # CLI subcommands (build, run, evidence, profile, info, repl)
+│   └── utils/               # Output formatters, QEMU discovery, typed exceptions
+├── profiles/                # Declarative profiles (minimal, symbolic, eda)
+├── supervisor/              # Autonomous supervisor & PID 1 hooks
+├── tests/                   # Automated pytest suite (22/22 passing)
+├── pyproject.toml           # PEP 621 package metadata & entry points
+├── run_evocore.bat          # Windows Command Prompt multi-mode launcher
+├── run_evocore.ps1          # Windows PowerShell multi-mode launcher
+├── evoforge.py              # Backward-compatible build engine wrapper
+├── extract_manifest.py      # Backward-compatible log extractor
 ├── LICENSE                  # MIT Open Source License
-└── README.md                # Project documentation & reference
+└── README.md                # Sovereign documentation & reference
 ```
 
 ---
